@@ -1,167 +1,704 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>bimazznxt</title>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style>
-    :root {
-      --bg-color: #eee;
-      --card-bg: #fff;
-      --text-color: #000;
-      --accent-color: #8E24AA;
-      --border-color: #E1BEE7;
-    }
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>bimazznxt - Liquid Glass Profile</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+		/>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-    .dark-mode {
-      --bg-color: #1a1a1a;
-      --card-bg: #2d2d2d;
-      --text-color: #fff;
-      --accent-color: #9C27B0;
-      --border-color: #555;
-    }
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+					sans-serif;
+				min-height: 100vh;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				overflow-x: hidden;
+				position: relative;
+				transition: all 0.3s ease;
+			}
 
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      transition: all 0.3s ease;
-    }
+			/* Animated background elements */
+			.bg-animation {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: 0;
+			}
 
-    .card {
-      background: var(--card-bg);
-      border: none;
-      position: relative;
-      overflow: hidden;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+			.floating-shape {
+				position: absolute;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				animation: float 6s ease-in-out infinite;
+			}
 
-    .card:before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 4px;
-      height: 100%;
-      background-color: var(--border-color);
-      transform: scaleY(1);
-      transition: all 0.5s;
-      transform-origin: bottom;
-    }
+			.floating-shape:nth-child(1) {
+				width: 80px;
+				height: 80px;
+				top: 20%;
+				left: 10%;
+				animation-delay: 0s;
+			}
 
-    .card:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 4px;
-      height: 100%;
-      background-color: var(--accent-color);
-      transform: scaleY(0);
-      transition: all 0.5s;
-      transform-origin: bottom;
-    }
+			.floating-shape:nth-child(2) {
+				width: 120px;
+				height: 120px;
+				top: 60%;
+				right: 10%;
+				animation-delay: 2s;
+			}
 
-    .card:hover::after {
-      transform: scaleY(1);
-    }
+			.floating-shape:nth-child(3) {
+				width: 60px;
+				height: 60px;
+				top: 80%;
+				left: 20%;
+				animation-delay: 4s;
+			}
 
-    .fonts {
-      font-size: 11px;
-    }
+			@keyframes float {
+				0%,
+				100% {
+					transform: translateY(0px) rotate(0deg);
+				}
+				50% {
+					transform: translateY(-20px) rotate(180deg);
+				}
+			}
 
-    .social-list {
-      display: flex;
-      list-style: none;
-      justify-content: center;
-      padding: 0;
-    }
+			/* Dark mode toggle */
+			.dark-mode-toggle {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 1000;
+				background: rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				border-radius: 25px;
+				padding: 12px 20px;
+				color: white;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
 
-    .social-list li {
-      padding: 10px;
-      color: var(--accent-color);
-      font-size: 19px;
-    }
+			.dark-mode-toggle:hover {
+				background: rgba(255, 255, 255, 0.3);
+				transform: translateY(-2px);
+				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
 
-    .buttons button:nth-child(1) {
-      border: 1px solid var(--accent-color) !important;
-      color: var(--accent-color);
-      height: 40px;
-    }
+			/* Main container */
+			.container {
+				position: relative;
+				z-index: 10;
+				max-width: 500px;
+				margin: 0 auto;
+				padding: 40px 20px;
+			}
 
-    .buttons button:nth-child(1):hover {
-      border: 1px solid var(--accent-color) !important;
-      color: #fff;
-      height: 40px;
-      background-color: var(--accent-color);
-    }
+			/* Main card with strong bevel */
+			.profile-card {
+				background: rgba(255, 255, 255, 0.15);
+				backdrop-filter: blur(40px);
+				border-radius: 30px;
+				padding: 40px;
+				border: 2px solid rgba(255, 255, 255, 0.2);
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2),
+					inset 0 2px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+					inset 2px 0 0 rgba(255, 255, 255, 0.2),
+					inset -2px 0 0 rgba(0, 0, 0, 0.1);
+				position: relative;
+				overflow: hidden;
+				transition: all 0.4s ease;
+				animation: slideUp 0.8s ease-out;
+			}
 
-    .buttons button:nth-child(2) {
-      border: 1px solid var(--accent-color) !important;
-      background-color: var(--accent-color);
-      color: #fff;
-      height: 40px;
-    }
-  </style>
-</head>
+			@keyframes slideUp {
+				from {
+					opacity: 0;
+					transform: translateY(50px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
 
-<body>
-  <div class="d-flex justify-content-end p-3">
-    <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
-      <i class="fa fa-moon-o"></i> Dark Mode
-    </button>
-  </div>
-  
-  <div class="container mt-3">
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-7">
-        <div class="card p-3 py-4">
-          <div class="text-center">
-            <img src="./1676022339393.jpg" width="100" class="rounded-circle">
-          </div>
-          <div class="text-center mt-3">
-            <span class="bg-secondary p-1 px-4 rounded text-white">Beginner</span>
-            <h5 class="mt-2 mb-0">Bima S. Aryasatya</h5>
-            <span>Fullstack Developer</span>
-            <div class="px-4 mt-1">
-              <p class="fonts">Pelajar Teknologi dari kota kecil, yang ambisinya cukup tinggi tapi nggak bisa dibilang ambis, ngalir aja apa yang dipunya</p>
-            </div>
-            <ul class="social-list">
-              <li><i class="fa fa-facebook"></i></li>
-              <li><i class="fa fa-dribbble"></i></li>
-              <li><i class="fa fa-instagram"></i></li>
-              <li><i class="fa fa-linkedin"></i></li>
-              <li><i class="fa fa-google"></i></li>
-            </ul>
-            <div class="buttons">
-              <a class="btn btn-outline-primary px-4" href="https://wa.me/+6281226181743">Message</a>
-              <a class="btn btn-primary px-4 ms-3" href="https://wa.me/+6281226181743">Contact</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+			.profile-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25),
+					inset 0 2px 0 rgba(255, 255, 255, 0.4),
+					inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+					inset 2px 0 0 rgba(255, 255, 255, 0.3),
+					inset -2px 0 0 rgba(0, 0, 0, 0.1);
+			}
 
-  <script>
-    const toggle = document.getElementById('darkModeToggle');
-    toggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      const icon = toggle.querySelector('i');
-      if (document.body.classList.contains('dark-mode')) {
-        icon.classList.replace('fa-moon-o', 'fa-sun-o');
-        toggle.textContent = ' Light Mode';
-      } else {
-        icon.classList.replace('fa-sun-o', 'fa-moon-o');
-        toggle.textContent = ' Dark Mode';
-      }
-      toggle.prepend(icon);
-    });
-  </script>
-</body>
+			/* Profile image */
+			.profile-image {
+				width: 120px;
+				height: 120px;
+				border-radius: 50%;
+				margin: 0 auto 20px;
+				overflow: hidden;
+				border: 3px solid rgba(255, 255, 255, 0.3);
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+					inset 0 2px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+				transition: all 0.3s ease;
+				animation: profilePulse 3s ease-in-out infinite;
+			}
+
+			@keyframes profilePulse {
+				0%,
+				100% {
+					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+						inset 0 2px 0 rgba(255, 255, 255, 0.3),
+						inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(255, 255, 255, 0.4);
+				}
+				50% {
+					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+						inset 0 2px 0 rgba(255, 255, 255, 0.3),
+						inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+						0 0 0 10px rgba(255, 255, 255, 0.1);
+				}
+			}
+
+			.profile-image img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				transition: transform 0.3s ease;
+			}
+
+			.profile-image:hover img {
+				transform: scale(1.1);
+			}
+
+			/* Badge */
+			.status-badge {
+				display: inline-block;
+				background: rgba(76, 175, 80, 0.8);
+				backdrop-filter: blur(10px);
+				color: white;
+				padding: 8px 16px;
+				border-radius: 20px;
+				font-size: 12px;
+				font-weight: 600;
+				margin-bottom: 15px;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				animation: badgeGlow 2s ease-in-out infinite alternate;
+			}
+
+			@keyframes badgeGlow {
+				from {
+					box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3),
+						inset 0 1px 0 rgba(255, 255, 255, 0.2),
+						inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				}
+				to {
+					box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5),
+						inset 0 1px 0 rgba(255, 255, 255, 0.3),
+						inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				}
+			}
+
+			/* Text styles */
+			.profile-name {
+				font-size: 28px;
+				font-weight: 700;
+				color: white;
+				margin-bottom: 5px;
+				text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+			}
+
+			.profile-age {
+				font-size: 14px;
+				color: rgba(255, 255, 255, 0.8);
+				margin-bottom: 5px;
+			}
+
+			.profile-role {
+				font-size: 16px;
+				color: rgba(255, 255, 255, 0.9);
+				margin-bottom: 20px;
+				font-weight: 500;
+			}
+
+			.profile-description {
+				font-size: 14px;
+				line-height: 1.6;
+				color: rgba(255, 255, 255, 0.85);
+				text-align: justify;
+				margin-bottom: 30px;
+			}
+
+			/* Social links */
+			.social-links {
+				display: flex;
+				justify-content: center;
+				gap: 15px;
+				margin-bottom: 30px;
+			}
+
+			.social-link {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: white;
+				font-size: 18px;
+				text-decoration: none;
+				transition: all 0.3s ease;
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
+
+			.social-link:hover {
+				transform: translateY(-3px) scale(1.1);
+				background: rgba(255, 255, 255, 0.2);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				color: white;
+			}
+
+			/* Buttons */
+			.button-group {
+				display: flex;
+				gap: 15px;
+				justify-content: center;
+			}
+
+			.btn {
+				padding: 12px 24px;
+				border-radius: 25px;
+				font-weight: 600;
+				text-decoration: none;
+				transition: all 0.3s ease;
+				border: 2px solid transparent;
+				font-size: 14px;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.btn-primary {
+				background: rgba(255, 255, 255, 0.2);
+				backdrop-filter: blur(15px);
+				color: white;
+				border: 2px solid rgba(255, 255, 255, 0.3);
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
+
+			.btn-primary:hover {
+				background: rgba(255, 255, 255, 0.3);
+				transform: translateY(-2px);
+				box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				color: white;
+			}
+
+			.btn-secondary {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				border: 2px solid rgba(255, 255, 255, 0.2);
+				box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
+
+			.btn-secondary:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+				color: white;
+			}
+
+			/* Dark mode styles */
+			body.dark-mode {
+				background: linear-gradient(
+					135deg,
+					#1a1a2e 0%,
+					#16213e 50%,
+					#0f3460 100%
+				);
+			}
+
+			body.dark-mode .profile-card {
+				background: rgba(0, 0, 0, 0.3);
+				border: 2px solid rgba(255, 255, 255, 0.1);
+			}
+
+			body.dark-mode .status-badge {
+				background: rgba(63, 81, 181, 0.8);
+				box-shadow: 0 4px 15px rgba(63, 81, 181, 0.3),
+					inset 0 1px 0 rgba(255, 255, 255, 0.2),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
+
+			/* Light mode styles */
+			body.light-mode {
+				background: linear-gradient(135deg, #5f81ca 0%, #a454af 100%);
+			}
+
+			body.light-mode .profile-card {
+				background: rgba(255, 255, 255, 0.25);
+				border: 2px solid rgba(255, 255, 255, 0.4);
+			}
+
+			body.light-mode .status-badge {
+				background: rgba(0, 150, 136, 0.9);
+				box-shadow: 0 4px 15px rgba(0, 150, 136, 0.4),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			}
+
+			/* Theme indicator */
+			.theme-indicator {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				z-index: 1000;
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				border-radius: 20px;
+				padding: 8px 16px;
+				color: rgba(255, 255, 255, 0.8);
+				font-size: 12px;
+				transition: all 0.3s ease;
+			}
+
+			/* Responsive */
+			@media (max-width: 768px) {
+				.container {
+					padding: 20px 15px;
+				}
+
+				.profile-card {
+					padding: 30px 20px;
+				}
+
+				.button-group {
+					flex-direction: column;
+					align-items: center;
+				}
+
+				.btn {
+					width: 100%;
+					max-width: 200px;
+				}
+
+				.theme-indicator {
+					display: none;
+				}
+			}
+
+			/* Text center */
+			.text-center {
+				text-align: center;
+			}
+
+			/* Ripple effect */
+			.ripple {
+				position: absolute;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.6);
+				transform: scale(0);
+				animation: rippleEffect 0.6s linear;
+				pointer-events: none;
+			}
+
+			@keyframes rippleEffect {
+				to {
+					transform: scale(4);
+					opacity: 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Background Animation -->
+		<div class="bg-animation">
+			<div class="floating-shape"></div>
+			<div class="floating-shape"></div>
+			<div class="floating-shape"></div>
+		</div>
+
+		<!-- Dark Mode Toggle -->
+		<button class="dark-mode-toggle" id="darkModeToggle">
+			<i class="fa fa-adjust"></i> <span id="toggleText">Auto</span>
+		</button>
+
+		<!-- Theme Indicator -->
+		<div class="theme-indicator" id="themeIndicator">
+			<i class="fas fa-palette"></i>
+			<span id="themeStatus">Following system</span>
+		</div>
+
+		<!-- Main Container -->
+		<div class="container">
+			<div class="profile-card">
+				<div class="text-center">
+					<!-- Profile Image -->
+					<div class="profile-image">
+						<img src="./1676022339393.jpg" alt="Bima S. Aryasatya" />
+					</div>
+
+					<!-- Status Badge -->
+					<div class="status-badge">Beginner</div>
+
+					<!-- Profile Info -->
+					<h1 class="profile-name">Bima S. Aryasatya</h1>
+					<p class="profile-age" id="ageDisplay">Loading age...</p>
+					<p class="profile-role">Fullstack Developer</p>
+
+					<!-- Description -->
+					<div class="profile-description">
+						<p>
+							Hello everyone, aku Bima Sunu Aryasatya, sesosok Mahasiswa dari
+							sebuah kampus swasta di Tegal. Aku mengambil jurusan yang
+							kira-kira bisa kalian tebak 😁 Ya, teknik informatika. Saat ini
+							aku sedang menempuh semester 4, dan aku sudah belajar banyak hal
+							tentang programming, mulai dari HTML, CSS, JavaScript, TypeScript,
+							Python, Java, Bootstrap, PHP, dan MySQL.
+						</p>
+						<br />
+						<p>
+							Aku ingin menjadi seorang Fullstack Developer, karena aku suka
+							dengan dunia programming. Aku juga suka dengan dunia desain, jadi
+							aku ingin menggabungkan keduanya. Aku juga suka dengan dunia
+							musik, jadi aku ingin membuat aplikasi musik yang bisa membantu
+							orang lain.
+						</p>
+					</div>
+
+					<!-- Social Links -->
+					<div class="social-links">
+						<a
+							href="https://www.facebook.com/bimaarya.satya.92/"
+							class="social-link"
+						>
+							<i class="fab fa-facebook-f"></i>
+						</a>
+						<a href="https://www.instagram.com/bimazznxt/" class="social-link">
+							<i class="fab fa-instagram"></i>
+						</a>
+						<a
+							href="https://www.linkedin.com/in/bimazznxt7717/"
+							class="social-link"
+						>
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+					</div>
+
+					<!-- Buttons -->
+					<div class="button-group">
+						<a href="https://wa.me/+6281226181743" class="btn btn-primary">
+							<i class="fab fa-whatsapp"></i> Message
+						</a>
+						<a href="https://wa.me/+6281226181743" class="btn btn-secondary">
+							<i class="fas fa-phone"></i> Contact
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Theme management
+			const darkModeToggle = document.getElementById("darkModeToggle");
+			const toggleText = document.getElementById("toggleText");
+			const themeIndicator = document.getElementById("themeIndicator");
+			const themeStatus = document.getElementById("themeStatus");
+			const body = document.body;
+
+			// Theme states: 'auto', 'light', 'dark'
+			let currentTheme = "auto";
+
+			// Check if user prefers dark mode
+			function getSystemTheme() {
+				return window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light";
+			}
+
+			// Apply theme based on current state
+			function applyTheme() {
+				body.classList.remove("dark-mode", "light-mode");
+
+				if (currentTheme === "auto") {
+					const systemTheme = getSystemTheme();
+					if (systemTheme === "dark") {
+						body.classList.add("dark-mode");
+					} else {
+						body.classList.add("light-mode");
+					}
+					themeStatus.innerHTML = `Following system (${systemTheme})`;
+				} else if (currentTheme === "dark") {
+					body.classList.add("dark-mode");
+					themeStatus.innerHTML = "Dark mode (manual)";
+				} else {
+					body.classList.add("light-mode");
+					themeStatus.innerHTML = "Light mode (manual)";
+				}
+			}
+
+			// Update toggle button appearance
+			function updateToggleButton() {
+				const icon = darkModeToggle.querySelector("i");
+
+				if (currentTheme === "auto") {
+					icon.className = "fas fa-adjust";
+					toggleText.textContent = "Auto";
+				} else if (currentTheme === "dark") {
+					icon.className = "fas fa-sun";
+					toggleText.textContent = "Light";
+				} else {
+					icon.className = "fas fa-moon";
+					toggleText.textContent = "Dark";
+				}
+			}
+
+			// Theme toggle cycle: auto -> light -> dark -> auto
+			darkModeToggle.addEventListener("click", () => {
+				if (currentTheme === "auto") {
+					currentTheme = "light";
+				} else if (currentTheme === "light") {
+					currentTheme = "dark";
+				} else {
+					currentTheme = "auto";
+				}
+
+				// Save preference
+				if (currentTheme === "auto") {
+					localStorage.removeItem("theme-preference");
+				} else {
+					localStorage.setItem("theme-preference", currentTheme);
+				}
+
+				applyTheme();
+				updateToggleButton();
+			});
+
+			// Listen for system theme changes
+			window
+				.matchMedia("(prefers-color-scheme: dark)")
+				.addEventListener("change", () => {
+					if (currentTheme === "auto") {
+						applyTheme();
+					}
+				});
+
+			// Initialize theme on page load
+			function initializeTheme() {
+				// Check for saved preference
+				const savedTheme = localStorage.getItem("theme-preference");
+				if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
+					currentTheme = savedTheme;
+				} else {
+					currentTheme = "auto";
+				}
+
+				applyTheme();
+				updateToggleButton();
+			}
+
+			// Age calculation
+			function calculateAge() {
+				const birthDate = new Date("2004-04-11");
+				const today = new Date();
+				let age = today.getFullYear() - birthDate.getFullYear();
+				const monthDiff = today.getMonth() - birthDate.getMonth();
+
+				if (
+					monthDiff < 0 ||
+					(monthDiff === 0 && today.getDate() < birthDate.getDate())
+				) {
+					age--;
+				}
+
+				document.getElementById("ageDisplay").textContent = `${age} years old`;
+			}
+
+			// Initialize everything when DOM is loaded
+			document.addEventListener("DOMContentLoaded", function () {
+				// Initialize theme
+				initializeTheme();
+
+				// Initialize age display
+				calculateAge();
+
+				// Add subtle parallax effect to floating shapes
+				const shapes = document.querySelectorAll(".floating-shape");
+
+				document.addEventListener("mousemove", (e) => {
+					const mouseX = e.clientX / window.innerWidth;
+					const mouseY = e.clientY / window.innerHeight;
+
+					shapes.forEach((shape, index) => {
+						const speed = (index + 1) * 0.5;
+						const x = (mouseX - 0.5) * speed * 20;
+						const y = (mouseY - 0.5) * speed * 20;
+
+						shape.style.transform = `translate(${x}px, ${y}px)`;
+					});
+				});
+			});
+
+			// Add click animation to buttons
+			document.querySelectorAll(".btn").forEach((btn) => {
+				btn.addEventListener("click", function (e) {
+					const ripple = document.createElement("span");
+					const rect = this.getBoundingClientRect();
+					const size = Math.max(rect.width, rect.height);
+					const x = e.clientX - rect.left - size / 2;
+					const y = e.clientY - rect.top - size / 2;
+
+					ripple.style.width = ripple.style.height = size + "px";
+					ripple.style.left = x + "px";
+					ripple.style.top = y + "px";
+					ripple.classList.add("ripple");
+
+					this.appendChild(ripple);
+
+					setTimeout(() => {
+						ripple.remove();
+					}, 600);
+				});
+			});
+		</script>
+	</body>
 </html>
